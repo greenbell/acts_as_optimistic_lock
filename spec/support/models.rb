@@ -4,9 +4,9 @@ class Versioned < ActiveRecord::Base
 end
 
 class Unversioned < ActiveRecord::Base
-  has_one :versioned
+  has_one :versioned, :autosave => true
 end
 
 class Revisioned < ActiveRecord::Base
-  acts_as_optimistic_lock :column => :revision, :message => 'is old'
+  acts_as_optimistic_lock :column => 'revision', :message => 'is old'
 end

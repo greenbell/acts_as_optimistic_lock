@@ -23,10 +23,6 @@ module ActsAsOptimisticLock
       class_eval <<-EOV
         include ActsAsOptimisticLock::InstanceMethods
 
-        def acts_as_optimistic_lock_class
-          ::#{self.name}
-        end
-
         before_validation :check_version
         before_save       :increment_version
       EOV
@@ -42,7 +38,7 @@ module ActsAsOptimisticLock
     def check_version
       unless new_record?
         record = self.class.unscoped.lock(true).select(version_column).find(self.id)
-        if version != record.version
+        if send(version_column) != record.send(version_column)
           errors.add(version_column, version_message)
           return nil
         end
