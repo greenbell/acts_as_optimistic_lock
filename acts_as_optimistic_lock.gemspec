@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = [
     "README"
   ]
-  s.files = Dir.glob("{lib}/**/*") + %w(CHANGELOG MIT-LICENSE README)
+  s.files = Dir.glob("{lib}/**/*") + %w(MIT-LICENSE README)
   s.homepage = %q{http://git.dev.ist-corp.jp/acts_as_optimistic_lock}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
