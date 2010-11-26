@@ -2,7 +2,6 @@
 $LOAD_PATH.unshift File.expand_path("../lib", __FILE__)
 require 'rubygems'
 require 'bundler/setup'
-require 'acts_as_optimistic_lock/version'
 
 desc 'Default: run unit tests.'
 task :default => :spec

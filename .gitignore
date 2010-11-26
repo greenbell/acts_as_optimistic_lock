@@ -1,0 +1,3 @@
+.bundle
+spec/debug.log
+spec/db/database.yml

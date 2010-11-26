@@ -5,6 +5,8 @@
 # ActiveRecordに楽観的ロック（他で変更されていたら上書きを失敗させる）を実装
 #
 module ActsAsOptimisticLock
+  VERSION = '0.0.1' unless defined?(::ActsAsOptimisticLock::VERSION)
+
   def self.included(base)
     base.extend(ClassMethods)
   end
@@ -54,3 +56,4 @@ module ActsAsOptimisticLock
     end
   end
 end
+
