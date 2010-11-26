@@ -12,8 +12,8 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = [
     "README"
   ]
-  s.files = Dir.glob("{lib,rails}/**/*") + %w(CHANGELOG MIT-LICENSE README)
-  s.homepage = %q{http://example.com/}
+  s.files = Dir.glob("{lib}/**/*") + %w(CHANGELOG MIT-LICENSE README)
+  s.homepage = %q{http://git.dev.ist-corp.jp/acts_as_optimistic_lock}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]
   s.rubygems_version = %q{1.3.6}
