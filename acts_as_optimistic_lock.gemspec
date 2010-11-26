@@ -1,11 +1,10 @@
 # -*- encoding: utf-8 -*-
 lib = File.expand_path('../lib/', __FILE__)
 $:.unshift lib unless $:.include?(lib)
-require 'acts_as_optimistic_lock'
 
 Gem::Specification.new do |s|
   s.name = %q{acts_as_optimistic_lock}
-  s.version = ::ActsAsOptimisticLock::VERSION
+  s.version = "0.0.3"
   s.authors = ["Mitsuhiro Shibuya"]
   s.description = %q{Optimistic Locking for Rails ActiveRecord models.}
   s.email = %q{shibuya@lavan7.co.jp}
