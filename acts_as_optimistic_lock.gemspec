@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version = ::ActsAsOptimisticLock::VERSION
   s.authors = ["Mitsuhiro Shibuya"]
   s.description = %q{Optimistic Locking for Rails ActiveRecord models.}
-  s.email = %q{info@collectiveidea.com}
+  s.email = %q{shibuya@lavan7.co.jp}
   s.extra_rdoc_files = [
     "README"
   ]
