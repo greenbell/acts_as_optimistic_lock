@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    acts_as_optimistic_lock (0.0.2)
+    acts_as_optimistic_lock (0.0.3)
       activerecord (>= 3.0.0)
 
 GEM
