@@ -15,7 +15,6 @@ require 'database_cleaner'
 require 'ruby-debug'
 
 require 'acts_as_optimistic_lock'
-require "#{File.dirname(__FILE__)}/../init"
 
 ActiveRecord::Base.logger = Logger.new(plugin_test_dir + "/debug.log")
 
