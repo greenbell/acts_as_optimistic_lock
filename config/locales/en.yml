@@ -1,0 +1,7 @@
+en:
+  acts_as_optimistic_lock:
+    errors:
+      messages:
+        updated: "This record was updated elsewhere."
+        deleted: "This record was deleted elsewhere."
+

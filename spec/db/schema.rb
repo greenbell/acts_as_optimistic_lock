@@ -14,4 +14,9 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column "name", :string
     t.column "revision", :integer
   end
+
+  create_table "locale_jas", :force => true do |t|
+    t.column "name", :string
+    t.column "version", :integer
+  end
 end

@@ -16,8 +16,8 @@ module ActsAsOptimisticLock
       cattr_accessor  :version_column, :version_message, :deleted_message
 
       self.version_column  = options[:column] || 'version'
-      self.version_message = options[:msg_updated] || 'This record was updated elsewhere.'
-      self.deleted_message = options[:msg_deleted] || 'This record was deleted elsewhere.'
+      self.version_message = options[:msg_updated] || I18n.translate('acts_as_optimistic_lock.errors.messages.updated')
+      self.deleted_message = options[:msg_deleted] || I18n.translate('acts_as_optimistic_lock.errors.messages.deleted')
 
       class_eval <<-EOV
         include ActsAsOptimisticLock::InstanceMethods
@@ -39,12 +39,12 @@ module ActsAsOptimisticLock
         begin
           record = self.class.lock(true).find(self.id)
         rescue ActiveRecord::RecordNotFound
-          errors.add(version_column, deleted_message)
+          errors.add :base, deleted_message
           return nil
         end
         if send(version_column) != record.send(version_column)
           self.attributes = record.attributes
-          errors.add(version_column, version_message)
+          errors.add :base, version_message
           return nil
         end
       end

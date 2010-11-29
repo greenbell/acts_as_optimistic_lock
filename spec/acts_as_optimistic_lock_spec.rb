@@ -1,3 +1,4 @@
+# coding: utf-8
 require 'spec_helper'
 
 describe ActsAsOptimisticLock do
@@ -52,9 +53,9 @@ describe ActsAsOptimisticLock do
           @versioned.save
         end
         it { @versioned.errors.should have(1).items }
-        it { @versioned.errors[:version].should have(1).items }
+        it { @versioned.errors[:base].should have(1).items }
         it "should have validation error message 'This record was deleted.'" do
-          @versioned.errors[:version][0].should == 'This record was deleted elsewhere.'
+          @versioned.errors[:base][0].should == 'This record was deleted elsewhere.'
         end
       end
     end
@@ -106,9 +107,9 @@ describe ActsAsOptimisticLock do
           @revisioned.save
         end
         it { @revisioned.errors.should have(1).items }
-        it { @revisioned.errors[:revision].should have(1).items }
+        it { @revisioned.errors[:base].should have(1).items }
         it "should have validation error message 'revision is old'" do
-          @revisioned.errors[:revision][0].should == 'revision is old'
+          @revisioned.errors[:base][0].should == 'revision is old'
         end
       end
     end
@@ -124,10 +125,37 @@ describe ActsAsOptimisticLock do
           @revisioned.save
         end
         it { @revisioned.errors.should have(1).items }
-        it { @revisioned.errors[:revision].should have(1).items }
+        it { @revisioned.errors[:base].should have(1).items }
         it "should have validation error message 'no longer exists'" do
-          @revisioned.errors[:revision][0].should == 'no longer exists'
+          @revisioned.errors[:base][0].should == 'no longer exists'
         end
+      end
+    end
+
+  end
+
+  describe "with i18n" do
+    before do
+      I18n.locale = :ja
+      @locale_ja = Factory.create(:locale_ja)
+    end
+    describe "when saved elsewhere" do
+      before do
+        LocaleJa.find(@locale_ja.id).save!
+        @locale_ja.save
+      end
+      it "should have validation error message '他の場所で先に更新されています。'" do
+        @locale_ja.errors[:base][0].should == '他の場所で先に更新されています。'
+      end
+    end
+
+    describe "when deleted elsewhere" do
+      before do
+        LocaleJa.destroy(@locale_ja.id)
+        @locale_ja.save
+      end
+      it "should have validation error message '他の場所で先に削除されています。'" do
+        @locale_ja.errors[:base][0].should == '他の場所で先に削除されています。'
       end
     end
   end

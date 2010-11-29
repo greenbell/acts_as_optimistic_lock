@@ -4,14 +4,14 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name = %q{acts_as_optimistic_lock}
-  s.version = "0.0.4"
+  s.version = "0.0.5"
   s.authors = ["Mitsuhiro Shibuya"]
   s.description = %q{Optimistic Locking for Rails ActiveRecord models.}
   s.email = %q{shibuya@lavan7.co.jp}
   s.extra_rdoc_files = [
     "README"
   ]
-  s.files = Dir.glob("{lib,rails}/**/*") + %w(MIT-LICENSE README)
+  s.files = Dir.glob("{config,lib,rails}/**/*") + %w(MIT-LICENSE README)
   s.homepage = %q{http://git.dev.ist-corp.jp/acts_as_optimistic_lock}
   s.rdoc_options = ["--charset=UTF-8"]
   s.require_paths = ["lib"]

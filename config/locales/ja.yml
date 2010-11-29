@@ -1,0 +1,7 @@
+ja:
+  acts_as_optimistic_lock:
+    errors:
+      messages:
+        updated: "他の場所で先に更新されています。"
+        deleted: "他の場所で先に削除されています。"
+

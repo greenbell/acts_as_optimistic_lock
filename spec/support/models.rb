@@ -1,3 +1,5 @@
+I18n.locale = :en
+
 class Versioned < ActiveRecord::Base
   acts_as_optimistic_lock
   belongs_to :unversioned
@@ -10,3 +12,10 @@ end
 class Revisioned < ActiveRecord::Base
   acts_as_optimistic_lock :column => 'revision', :msg_updated => 'revision is old', :msg_deleted => 'no longer exists'
 end
+
+I18n.locale = :ja
+
+class LocaleJa < ActiveRecord::Base
+  acts_as_optimistic_lock
+end
+
