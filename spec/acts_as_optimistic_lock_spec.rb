@@ -23,9 +23,16 @@ describe ActsAsOptimisticLock do
 
     describe "when saved elsewhere" do
       before do
+        @versioned2.name = "Changed"
         @versioned2.save!
       end
       it { @versioned.save.should be_false }
+      describe "with retrieval of updated value" do
+        before do
+          @versioned.save
+        end
+        it { @versioned.name.should == "Changed" }
+      end
     end
 
     describe "when version is higher" do

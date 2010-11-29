@@ -43,6 +43,7 @@ module ActsAsOptimisticLock
           return nil
         end
         if send(version_column) != record.send(version_column)
+          self.attributes = record.attributes
           errors.add(version_column, version_message)
           return nil
         end
