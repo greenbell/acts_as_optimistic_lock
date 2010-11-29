@@ -13,10 +13,11 @@ module ActsAsOptimisticLock
   #
   module ClassMethods
     def acts_as_optimistic_lock(options = {})
-      cattr_accessor  :version_column, :version_message
+      cattr_accessor  :version_column, :version_message, :deleted_message
 
       self.version_column  = options[:column] || 'version'
-      self.version_message = options[:message] || 'is not latest'
+      self.version_message = options[:msg_updated] || 'This record was updated elsewhere.'
+      self.deleted_message = options[:msg_deleted] || 'This record was deleted elsewhere.'
 
       class_eval <<-EOV
         include ActsAsOptimisticLock::InstanceMethods
@@ -35,7 +36,12 @@ module ActsAsOptimisticLock
     #
     def check_version
       unless new_record?
-        record = self.class.unscoped.lock(true).select(version_column).find(self.id)
+        begin
+          record = self.class.lock(true).find(self.id)
+        rescue ActiveRecord::RecordNotFound
+          errors.add(version_column, deleted_message)
+          return nil
+        end
         if send(version_column) != record.send(version_column)
           errors.add(version_column, version_message)
           return nil

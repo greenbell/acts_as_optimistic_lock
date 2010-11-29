@@ -19,6 +19,8 @@ describe ActsAsOptimisticLock do
       @versioned2 = Versioned.find(@versioned.id)
     end
 
+    it { @versioned.name.should == "Versioned Record" }
+
     describe "when saved elsewhere" do
       before do
         @versioned2.save!
@@ -30,8 +32,24 @@ describe ActsAsOptimisticLock do
       before do
         @versioned.version = @versioned2.version + 1
       end
-      subject { @versioned }
-      its(:save) { should be_false }
+      it { @versioned.save.should be_false }
+    end
+
+    describe "when deleted elsewhere" do
+      before do
+        @versioned2.delete
+      end
+      it { @versioned.save.should be_false }
+      describe "on failure" do
+        before do
+          @versioned.save
+        end
+        it { @versioned.errors.should have(1).items }
+        it { @versioned.errors[:version].should have(1).items }
+        it "should have validation error message 'This record was deleted.'" do
+          @versioned.errors[:version][0].should == 'This record was deleted elsewhere.'
+        end
+      end
     end
   end
 
@@ -54,8 +72,7 @@ describe ActsAsOptimisticLock do
         before do
           Versioned.find(@versioned.id).save!
         end
-        subject { @unversioned }
-        its(:save) { should be_false }
+        it { @unversioned.save.should be_false }
       end
     end
   end
@@ -76,6 +93,23 @@ describe ActsAsOptimisticLock do
       before do
         Revisioned.find(@revisioned.id).save!
       end
+      it { @revisioned.save.should be_false }
+      describe "on failure" do
+        before do
+          @revisioned.save
+        end
+        it { @revisioned.errors.should have(1).items }
+        it { @revisioned.errors[:revision].should have(1).items }
+        it "should have validation error message 'revision is old'" do
+          @revisioned.errors[:revision][0].should == 'revision is old'
+        end
+      end
+    end
+
+    describe "when deleted elsewhere" do
+      before do
+        Revisioned.destroy(@revisioned.id)
+      end
       subject { @revisioned }
       its(:save) { should be_false }
       describe "on failure" do
@@ -84,8 +118,8 @@ describe ActsAsOptimisticLock do
         end
         it { @revisioned.errors.should have(1).items }
         it { @revisioned.errors[:revision].should have(1).items }
-        it "should have validation error message 'is old'" do
-          @revisioned.errors[:revision][0].should == 'is old'
+        it "should have validation error message 'no longer exists'" do
+          @revisioned.errors[:revision][0].should == 'no longer exists'
         end
       end
     end

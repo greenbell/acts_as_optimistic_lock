@@ -3,7 +3,7 @@ Factory.define :unversioned, :class => Unversioned do |u|
 end
 
 Factory.define :versioned, :class => Versioned do |v|
-  v.name 'First Versioned Record'
+  v.name 'Versioned Record'
   v.unversioned { Factory(:unversioned) }
 end
 

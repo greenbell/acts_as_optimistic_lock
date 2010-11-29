@@ -8,5 +8,5 @@ class Unversioned < ActiveRecord::Base
 end
 
 class Revisioned < ActiveRecord::Base
-  acts_as_optimistic_lock :column => 'revision', :message => 'is old'
+  acts_as_optimistic_lock :column => 'revision', :msg_updated => 'revision is old', :msg_deleted => 'no longer exists'
 end
