@@ -4,7 +4,7 @@ $:.unshift lib unless $:.include?(lib)
 
 Gem::Specification.new do |s|
   s.name = %q{acts_as_optimistic_lock}
-  s.version = "0.0.3"
+  s.version = "0.0.4"
   s.authors = ["Mitsuhiro Shibuya"]
   s.description = %q{Optimistic Locking for Rails ActiveRecord models.}
   s.email = %q{shibuya@lavan7.co.jp}
