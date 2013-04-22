@@ -1,3 +1,4 @@
 .bundle
+Gemfile.lock
 spec/debug.log
 spec/db/database.yml
