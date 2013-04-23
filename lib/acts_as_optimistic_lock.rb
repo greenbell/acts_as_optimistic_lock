@@ -15,16 +15,16 @@ module ActsAsOptimisticLock
     def acts_as_optimistic_lock(options = {})
       cattr_accessor  :version_column, :version_message, :deleted_message
 
-      self.version_column  = options[:column] || 'version'
+      self.version_column  = (options[:column] || 'version').to_sym
       self.version_message = options[:msg_updated] || I18n.translate('acts_as_optimistic_lock.errors.messages.updated')
       self.deleted_message = options[:msg_deleted] || I18n.translate('acts_as_optimistic_lock.errors.messages.deleted')
 
-      class_eval <<-EOV
+      class_eval do
         include ActsAsOptimisticLock::InstanceMethods
 
         before_validation :check_version
         before_save       :increment_version
-      EOV
+      end
     end
   end
   #
@@ -58,9 +58,11 @@ module ActsAsOptimisticLock
   end
 end
 
-ActiveRecord::Base.class_eval { include ActsAsOptimisticLock }
+ActiveSupport.on_load(:active_record) do
+  ActiveRecord::Base.send(:include, ActsAsOptimisticLock)
+end
 
 Dir[File.join("#{File.dirname(__FILE__)}/../config/locales/*.yml")].each do |locale|
-    I18n.load_path.unshift(locale)
+  I18n.load_path.unshift(locale)
 end
 

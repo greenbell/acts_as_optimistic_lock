@@ -89,8 +89,8 @@ describe ActsAsOptimisticLock do
     before do
       @revisioned = Factory.create(:revisioned)
     end
-    it { Versioned.version_column.should == 'version' }
-    it { Revisioned.version_column.should == 'revision' }
+    it { Versioned.version_column.should == :version }
+    it { Revisioned.version_column.should == :revision }
 
     it "revision should be 2 after saving" do
       @revisioned.save!
