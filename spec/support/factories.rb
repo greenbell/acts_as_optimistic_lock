@@ -1,18 +1,20 @@
 # coding: utf-8
 
-Factory.define :unversioned, :class => Unversioned do |u|
-  u.name 'Unversioned Record'
-end
+FactoryGirl.define do
+  factory :unversioned, :class => Unversioned do
+    name 'Unversioned Record'
+  end
 
-Factory.define :versioned, :class => Versioned do |v|
-  v.name 'Versioned Record'
-  v.unversioned { Factory(:unversioned) }
-end
+  factory :versioned, :class => Versioned do
+    name 'Versioned Record'
+    unversioned { FactoryGirl.create(:unversioned) }
+  end
 
-Factory.define :revisioned, :class => Revisioned do |r|
-  r.name 'Rivisioned Record'
-end
+  factory :revisioned, :class => Revisioned do
+    name 'Rivisioned Record'
+  end
 
-Factory.define :locale_ja, :class => LocaleJa do |l|
-  l.name '日本語'
+  factory :locale_ja, :class => LocaleJa do
+    name '日本語'
+  end
 end

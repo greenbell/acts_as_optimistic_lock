@@ -3,7 +3,7 @@ require 'spec_helper'
 
 describe ActsAsOptimisticLock do
   before do
-    @versioned = Factory.create(:versioned)
+    @versioned = FactoryGirl.create(:versioned)
   end
 
   describe "when saving" do
@@ -87,7 +87,7 @@ describe ActsAsOptimisticLock do
 
   describe "with configuration" do
     before do
-      @revisioned = Factory.create(:revisioned)
+      @revisioned = FactoryGirl.create(:revisioned)
     end
     it { Versioned.version_column.should == :version }
     it { Revisioned.version_column.should == :revision }
@@ -137,7 +137,7 @@ describe ActsAsOptimisticLock do
   describe "with i18n" do
     before do
       I18n.locale = :ja
-      @locale_ja = Factory.create(:locale_ja)
+      @locale_ja = FactoryGirl.create(:locale_ja)
     end
     describe "when saved elsewhere" do
       before do
