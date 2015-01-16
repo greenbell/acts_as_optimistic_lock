@@ -21,7 +21,7 @@ Gem::Specification.new do |s|
   s.add_runtime_dependency     'activerecord'
   s.add_runtime_dependency     'activesupport'
   s.add_development_dependency 'rails'
-  s.add_development_dependency 'rspec', "~> 2.0"
+  s.add_development_dependency 'rspec', "~> 3.0"
   s.add_development_dependency 'factory_girl_rails', "~> 4.0"
   s.add_development_dependency 'database_cleaner'
 end

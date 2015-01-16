@@ -7,11 +7,8 @@ describe ActsAsOptimisticLock do
   end
 
   describe "with saving" do
-    subject { @versioned }
-    its(:version) { should == 1 }
-    it "s version should be 2 after saving" do
-      @versioned.save!
-      @versioned.version.should == 2
+    it "increases version" do
+      expect{ @versioned.save! }.to change{ @versioned.version }.from(1).to(2)
     end
   end
 
@@ -20,19 +17,19 @@ describe ActsAsOptimisticLock do
       @versioned2 = Versioned.find(@versioned.id)
     end
 
-    it { @versioned.name.should == "Versioned Record" }
+    it { expect(@versioned.name).to eq("Versioned Record") }
 
     context "when saved elsewhere" do
       before do
         @versioned2.name = "Changed"
         @versioned2.save!
       end
-      it { @versioned.save.should be_false }
+      it { expect(@versioned.save).to be_falsey }
       describe "with retrieval of updated value" do
         before do
           @versioned.save
         end
-        it { @versioned.name.should == "Changed" }
+        it { expect(@versioned.name).to eq("Changed") }
       end
     end
 
@@ -40,22 +37,22 @@ describe ActsAsOptimisticLock do
       before do
         @versioned.version = @versioned2.version + 1
       end
-      it { @versioned.save.should be_false }
+      it { expect(@versioned.save).to be_falsey }
     end
 
     context "when deleted elsewhere" do
       before do
         @versioned2.delete
       end
-      it { @versioned.save.should be_false }
+      it { expect(@versioned.save).to be_falsey }
       context "on failure" do
         before do
           @versioned.save
         end
-        it { @versioned.errors.should have(1).items }
-        it { @versioned.errors[:base].should have(1).items }
+        it { expect(@versioned.errors.size).to eq(1) }
+        it { expect(@versioned.errors[:base].size).to eq(1) }
         it "should have validation error message 'This record was deleted.'" do
-          @versioned.errors[:base][0].should == 'This record was deleted elsewhere.'
+          expect(@versioned.errors[:base][0]).to eq('This record was deleted elsewhere.')
         end
       end
     end
@@ -74,13 +71,16 @@ describe ActsAsOptimisticLock do
         @unversioned.save!
       end
       subject { @unversioned.versioned }
-      its(:version) { should == @version_no + 1 }
+
+      it "increases version" do
+        expect(@unversioned.versioned.version).to eq(@version_no + 1)
+      end
 
       context "and record was updated elsewhere" do
         before do
           Versioned.find(@versioned.id).save!
         end
-        it { @unversioned.save.should be_false }
+        it { expect(@unversioned.save).to be_falsey }
       end
     end
   end
@@ -89,27 +89,27 @@ describe ActsAsOptimisticLock do
     before do
       @revisioned = FactoryGirl.create(:revisioned)
     end
-    it { Versioned.version_column.should == :version }
-    it { Revisioned.version_column.should == :revision }
+    it { expect(Versioned.version_column).to eq(:version) }
+    it { expect(Revisioned.version_column).to eq(:revision) }
 
     it "revision should be 2 after saving" do
       @revisioned.save!
-      @revisioned.revision.should == 2
+      expect(@revisioned.revision).to eq(2)
     end
 
     context "when saved elsewhere" do
       before do
         Revisioned.find(@revisioned.id).save!
       end
-      it { @revisioned.save.should be_false }
+      it { expect(@revisioned.save).to be_falsey }
       context "on failure" do
         before do
           @revisioned.save
         end
-        it { @revisioned.errors.should have(1).items }
-        it { @revisioned.errors[:base].should have(1).items }
+        it { expect(@revisioned.errors.size).to eq(1) }
+        it { expect(@revisioned.errors[:base].size).to eq(1) }
         it "should have validation error message 'revision is old'" do
-          @revisioned.errors[:base][0].should == 'revision is old'
+          expect(@revisioned.errors[:base][0]).to eq('revision is old')
         end
       end
     end
@@ -119,15 +119,19 @@ describe ActsAsOptimisticLock do
         Revisioned.destroy(@revisioned.id)
       end
       subject { @revisioned }
-      its(:save) { should be_false }
+
+      it "fails to save" do
+        expect(subject.save).to be_falsey
+      end
+
       context "on failure" do
         before do
           @revisioned.save
         end
-        it { @revisioned.errors.should have(1).items }
-        it { @revisioned.errors[:base].should have(1).items }
+        it { expect(@revisioned.errors.size).to eq(1) }
+        it { expect(@revisioned.errors[:base].size).to eq(1) }
         it "should have validation error message 'no longer exists'" do
-          @revisioned.errors[:base][0].should == 'no longer exists'
+          expect(@revisioned.errors[:base][0]).to eq('no longer exists')
         end
       end
     end
@@ -145,7 +149,7 @@ describe ActsAsOptimisticLock do
         @locale_ja.save
       end
       it "should have validation error message '他の場所で先に更新されています。'" do
-        @locale_ja.errors[:base][0].should == '他の場所で先に更新されています。'
+        expect(@locale_ja.errors[:base][0]).to eq('他の場所で先に更新されています。')
       end
     end
 
@@ -155,7 +159,7 @@ describe ActsAsOptimisticLock do
         @locale_ja.save
       end
       it "should have validation error message '他の場所で先に削除されています。'" do
-        @locale_ja.errors[:base][0].should == '他の場所で先に削除されています。'
+        expect(@locale_ja.errors[:base][0]).to eq('他の場所で先に削除されています。')
       end
     end
   end
@@ -167,7 +171,7 @@ describe ActsAsOptimisticLock do
     end
 
     it "does not fail stating 'already deleted'" do
-      @employer.valid?.should be_true
+      expect(@employer.valid?).to be_truthy
     end
   end
 end
