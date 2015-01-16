@@ -6,7 +6,7 @@ describe ActsAsOptimisticLock do
     @versioned = FactoryGirl.create(:versioned)
   end
 
-  describe "when saving" do
+  describe "with saving" do
     subject { @versioned }
     its(:version) { should == 1 }
     it "s version should be 2 after saving" do
@@ -22,7 +22,7 @@ describe ActsAsOptimisticLock do
 
     it { @versioned.name.should == "Versioned Record" }
 
-    describe "when saved elsewhere" do
+    context "when saved elsewhere" do
       before do
         @versioned2.name = "Changed"
         @versioned2.save!
@@ -43,12 +43,12 @@ describe ActsAsOptimisticLock do
       it { @versioned.save.should be_false }
     end
 
-    describe "when deleted elsewhere" do
+    context "when deleted elsewhere" do
       before do
         @versioned2.delete
       end
       it { @versioned.save.should be_false }
-      describe "on failure" do
+      context "on failure" do
         before do
           @versioned.save
         end
@@ -66,7 +66,7 @@ describe ActsAsOptimisticLock do
       @version_no = @versioned.version
     end
 
-    describe "when associated model was saved" do
+    context "when associated model was saved" do
       before do
         @unversioned = @versioned.unversioned
         @version_no = @unversioned.versioned.version
@@ -76,7 +76,7 @@ describe ActsAsOptimisticLock do
       subject { @unversioned.versioned }
       its(:version) { should == @version_no + 1 }
 
-      describe "when record was updated elsewhere" do
+      context "and record was updated elsewhere" do
         before do
           Versioned.find(@versioned.id).save!
         end
@@ -97,12 +97,12 @@ describe ActsAsOptimisticLock do
       @revisioned.revision.should == 2
     end
 
-    describe "when saved elsewhere" do
+    context "when saved elsewhere" do
       before do
         Revisioned.find(@revisioned.id).save!
       end
       it { @revisioned.save.should be_false }
-      describe "on failure" do
+      context "on failure" do
         before do
           @revisioned.save
         end
@@ -114,13 +114,13 @@ describe ActsAsOptimisticLock do
       end
     end
 
-    describe "when deleted elsewhere" do
+    context "when deleted elsewhere" do
       before do
         Revisioned.destroy(@revisioned.id)
       end
       subject { @revisioned }
       its(:save) { should be_false }
-      describe "on failure" do
+      context "on failure" do
         before do
           @revisioned.save
         end
@@ -134,12 +134,12 @@ describe ActsAsOptimisticLock do
 
   end
 
-  describe "with i18n" do
+  describe "i18n" do
     before do
       I18n.locale = :ja
       @locale_ja = FactoryGirl.create(:locale_ja)
     end
-    describe "when saved elsewhere" do
+    context "when saved elsewhere" do
       before do
         LocaleJa.find(@locale_ja.id).save!
         @locale_ja.save
@@ -149,7 +149,7 @@ describe ActsAsOptimisticLock do
       end
     end
 
-    describe "when deleted elsewhere" do
+    context "when deleted elsewhere" do
       before do
         LocaleJa.destroy(@locale_ja.id)
         @locale_ja.save
@@ -157,6 +157,17 @@ describe ActsAsOptimisticLock do
       it "should have validation error message '他の場所で先に削除されています。'" do
         @locale_ja.errors[:base][0].should == '他の場所で先に削除されています。'
       end
+    end
+  end
+
+  context "with STI table" do
+    before do
+      @employee = FactoryGirl.create(:employee)
+      @employer = @employee.becomes(Employer)
+    end
+
+    it "does not fail stating 'already deleted'" do
+      @employer.valid?.should be_true
     end
   end
 end

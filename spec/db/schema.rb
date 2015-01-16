@@ -19,4 +19,9 @@ ActiveRecord::Schema.define(:version => 1) do
     t.column "name", :string
     t.column "version", :integer
   end
+
+  create_table "people", :force => true do |t|
+    t.column "type", :string
+    t.column "version", :integer
+  end
 end

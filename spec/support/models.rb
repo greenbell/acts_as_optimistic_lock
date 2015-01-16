@@ -19,3 +19,10 @@ class LocaleJa < ActiveRecord::Base
   acts_as_optimistic_lock
 end
 
+
+class Person < ActiveRecord::Base
+  acts_as_optimistic_lock
+end
+
+class Employer < Person; end
+class Employee < Person; end

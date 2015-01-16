@@ -9,6 +9,7 @@ else
   gem 'activesupport', '~> 3.0'
   gem 'mysql2'
 end
-gem 'debugger'
+gem 'debugger', platforms: [:mri_19, :mri_20]
+gem 'byebug', platforms: :mri_21
 
 gemspec

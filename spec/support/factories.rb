@@ -17,4 +17,7 @@ FactoryGirl.define do
   factory :locale_ja, :class => LocaleJa do
     name '日本語'
   end
+
+  factory :employee do
+  end
 end

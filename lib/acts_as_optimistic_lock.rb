@@ -37,7 +37,7 @@ module ActsAsOptimisticLock
     def check_version
       unless new_record?
         begin
-          record = self.class.lock(true).find(self.id)
+          record = self.class.base_class.lock(true).find(self.id)
         rescue ActiveRecord::RecordNotFound
           errors.add :base, deleted_message
           return nil
