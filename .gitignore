@@ -1,4 +1,5 @@
 .bundle
 Gemfile.lock
+gemfiles/*.lock
 spec/debug.log
 spec/db/database.yml
