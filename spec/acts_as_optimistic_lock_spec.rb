@@ -67,13 +67,14 @@ describe ActsAsOptimisticLock do
       before do
         @unversioned = @versioned.unversioned
         @version_no = @unversioned.versioned.version
+        @unversioned.versioned.name += 'abc'
         @unversioned.name += 'abc'
         @unversioned.save!
       end
       subject { @unversioned.versioned }
 
       it "increases version" do
-        expect(@unversioned.versioned.version).to eq(@version_no + 1)
+        expect(subject.version).to eq(@version_no + 1)
       end
 
       context "and record was updated elsewhere" do

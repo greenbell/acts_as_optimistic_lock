@@ -18,8 +18,8 @@ Gem::Specification.new do |s|
   s.rubygems_version = %q{1.3.6}
   s.summary = %q{Optimistic Locking for Rails ActiveRecord models}
 
-  s.add_runtime_dependency     'activerecord'
-  s.add_runtime_dependency     'activesupport'
+  s.add_runtime_dependency     'activerecord', [">= 3.0", "< 5"]
+  s.add_runtime_dependency     'activesupport', [">= 3.0", "< 5"]
   s.add_development_dependency 'rails'
   s.add_development_dependency 'rspec', "~> 3.0"
   s.add_development_dependency 'factory_girl_rails', "~> 4.0"
